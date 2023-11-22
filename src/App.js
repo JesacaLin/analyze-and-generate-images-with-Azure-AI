@@ -9,7 +9,7 @@ function DisplayResults({ result }) {
   return (
     <div>
       <h2>Analysis Results</h2>
-      <p>{JSON.stringify(result, null, 2)}</p>
+      <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );
 }

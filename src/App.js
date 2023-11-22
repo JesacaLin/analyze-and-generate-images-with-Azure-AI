@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import analyzeImage from "./azure-image-analysis";
 
 function App() {
   const title = "Computer Vision";
@@ -10,6 +11,7 @@ function App() {
   const [imageAnalysis, setImageAnalysis] = React.useState("");
   //create a state variable to store the text prompt
   const [textPrompt, setTextPrompt] = React.useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   //declare a function to process the URL
   // const processUrl = () => {
@@ -35,8 +37,18 @@ function App() {
         }}
       />
       <br />
-      <button onClick={() => console.log("Analyze")}>Analyze</button>
+      <button
+        onClick={() => {
+          setIsLoading(true);
+          analyzeImage(value)
+            .then((result) => console.log(result))
+            .finally(() => setIsLoading(false));
+        }}
+      >
+        Analyze
+      </button>
       <button onClick={() => console.log("Generate")}>Generate</button>
+      {isLoading && <p>Loading...</p>}
     </div>
   );
 }

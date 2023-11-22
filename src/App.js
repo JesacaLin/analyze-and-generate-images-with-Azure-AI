@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import analyzeImage from "./azure-image-analysis";
 
-function DisplayResults({ result }) {
+function DisplayResults({ result, url, image }) {
   if (!result) {
     return null;
   }
@@ -9,6 +9,16 @@ function DisplayResults({ result }) {
   return (
     <div>
       <h2>Analysis Results</h2>
+      <img
+        src={image}
+        alt="Analyzed"
+        style={{
+          width: "500px",
+          borderRadius: "8px",
+          padding: "4px",
+        }}
+      />
+      <p>URL: {url}</p>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );
@@ -20,6 +30,8 @@ function App() {
 
   const [imageAnalysis, setImageAnalysis] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [image, setImage] = useState("");
 
   return (
     <div>
@@ -41,10 +53,10 @@ function App() {
       <br />
       <button
         onClick={() => {
+          setImage(value);
+          setImageUrl(value); // Set the imageUrl state to the current value of the input field
           setIsLoading(true);
-          analyzeImage(
-            "https://moderatorsampleimages.blob.core.windows.net/samples/sample16.png"
-          )
+          analyzeImage(value) // Pass the current value of the input field to the analyzeImage function
             .then((result) => {
               console.log(result);
               setImageAnalysis(result); // Set the imageAnalysis state
@@ -59,7 +71,8 @@ function App() {
       </button>
       <button onClick={() => console.log("Generate")}>Generate</button>
       {isLoading && <p>Loading...</p>}
-      <DisplayResults result={imageAnalysis} />
+
+      <DisplayResults result={imageAnalysis} url={imageUrl} image={image} />
     </div>
   );
 }

@@ -8,7 +8,7 @@ function App() {
   const wow = "wow, did I find a loophole?";
   return (
     <div>
-      Hello {value}, {hope}
+      Hello {value}, {hope}! {wow}
     </div>
   );
 }

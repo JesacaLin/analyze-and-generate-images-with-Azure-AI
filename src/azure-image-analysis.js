@@ -1,6 +1,6 @@
 const analyzeImage = async (imageUrl) => {
   const response = await fetch(
-    "https://ImageAnalyzerDevCV.cognitiveservices.azure.com/vision/v3.0/analyze?visualFeatures=Categories&details=Landmarks&language=en&visualFeatures=Caption",
+    "https://eastus.api.cognitive.microsoft.com/vision/v3.0/analyze?visualFeatures=Description&details=Landmarks&language=en",
     {
       method: "POST",
       headers: {

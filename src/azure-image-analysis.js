@@ -1,11 +1,11 @@
 const analyzeImage = async (imageUrl) => {
   const response = await fetch(
-    "https://ImageAnalyzerDevCV.cognitiveservices.azure.com/vision/v3.0/analyze?visualFeatures=Categories&details=Landmarks&language=en&visualFeatures=Description",
+    "https://ImageAnalyzerDevCV.cognitiveservices.azure.com/vision/v3.0/analyze?visualFeatures=Categories&details=Landmarks&language=en&visualFeatures=Caption",
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Ocp-Apim-Subscription-Key": process.env.API_KEY,
+        "Ocp-Apim-Subscription-Key": process.env.REACT_APP_API_KEY,
       },
       body: JSON.stringify({ url: imageUrl }),
     }

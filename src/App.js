@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 import analyzeImage from "./azure-image-analysis";
 
+function DisplayResults({ result }) {
+  if (!result) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h2>Analysis Results</h2>
+      <p>{JSON.stringify(result, null, 2)}</p>
+    </div>
+  );
+}
+
 function App() {
   const title = "Computer Vision";
   const [value, setValue] = React.useState("");
 
-  //create a state variable to store the URL
-  const [url, setUrl] = React.useState("");
-  //create a state variable to store the image analysis results
-  const [imageAnalysis, setImageAnalysis] = React.useState("");
-  //create a state variable to store the text prompt
-  const [textPrompt, setTextPrompt] = React.useState("");
+  const [imageAnalysis, setImageAnalysis] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  //declare a function to process the URL
-  // const processUrl = () => {
-  //   //call the API to process the URL
-  //   //store the results in the state variable
-  // };
 
   return (
     <div>
       <h1>{title}</h1>
-      <h4>Insert URL or type prompt:</h4>
+      <h4>Insert URL or type prompt: **testing**</h4>
       <input
         type="text"
         value={value}
@@ -40,8 +42,16 @@ function App() {
       <button
         onClick={() => {
           setIsLoading(true);
-          analyzeImage(value)
-            .then((result) => console.log(result))
+          analyzeImage(
+            "https://moderatorsampleimages.blob.core.windows.net/samples/sample16.png"
+          )
+            .then((result) => {
+              console.log(result);
+              setImageAnalysis(result); // Set the imageAnalysis state
+            })
+            .catch((error) => {
+              console.error(error);
+            })
             .finally(() => setIsLoading(false));
         }}
       >
@@ -49,6 +59,7 @@ function App() {
       </button>
       <button onClick={() => console.log("Generate")}>Generate</button>
       {isLoading && <p>Loading...</p>}
+      <DisplayResults result={imageAnalysis} />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import analyzeImage from "./azure-image-analysis";
 import generateImage from "./azure-image-generation";
 
-function DisplayResults({ result, url, image, generatedImage }) {
+function DisplayResults({ result, url, image }) {
   if (!result) {
     return null;
   }
@@ -21,21 +21,29 @@ function DisplayResults({ result, url, image, generatedImage }) {
       />
       <p>URL: {url}</p>
       <pre>{JSON.stringify(result, null, 2)}</pre>
+    </div>
+  );
+}
 
-      {generatedImage && (
-        <>
-          <h2>Generated Image</h2>
-          <img
-            src={generatedImage.url}
-            alt="Generated"
-            style={{
-              width: "500px",
-              borderRadius: "8px",
-              padding: "4px",
-            }}
-          />
-        </>
-      )}
+function DisplayGeneratedResults({ result, url, generatedImage }) {
+  if (!result) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h2>Generated Results</h2>
+      <img
+        src={generatedImage}
+        alt="Generated"
+        style={{
+          width: "500px",
+          borderRadius: "8px",
+          padding: "4px",
+        }}
+      />
+      <p>URL: {url}</p>
+      <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );
 }
@@ -44,10 +52,10 @@ function App() {
   const title = "Computer Vision";
   const [value, setValue] = React.useState("");
 
-  const [imageAnalysis, setImageAnalysis] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState("");
+  const [imageAnalysis, setImageAnalysis] = useState(null);
   const [generatedImage, setGeneratedImage] = useState(null);
 
   return (
@@ -90,10 +98,10 @@ function App() {
       <button
         onClick={() => {
           setIsLoading(true);
-          generateImage(value) // Pass the current value of the input field to the generateImage function
+          generateImage(value)
             .then((result) => {
               console.log(result);
-              setGeneratedImage(result); // Set the generatedImage state
+              setGeneratedImage(result.url);
             })
             .catch((error) => {
               console.error(error);
@@ -106,10 +114,11 @@ function App() {
 
       {isLoading && <p>Loading...</p>}
 
-      <DisplayResults
-        result={imageAnalysis}
+      <DisplayResults result={imageAnalysis} image={imageUrl} url={imageUrl} />
+
+      <DisplayGeneratedResults
+        result={generatedImage}
         image={imageUrl}
-        url={imageUrl}
         generatedImage={generatedImage}
       />
     </div>

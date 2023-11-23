@@ -1,24 +1,34 @@
 const generateImage = async (prompt) => {
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.REACT_APP_API_KEY2}`,
+  console.log("Prompt:", prompt);
+
+  const requestBody = {
+    model: "dall-e-3",
+    prompt: prompt,
+    n: 1,
+    size: "1024x1024",
   };
 
-  console.log(headers);
+  console.log("Request body:", requestBody);
 
   const response = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
-    headers: headers,
-    body: JSON.stringify({
-      model: "dall-e-2",
-      prompt: prompt,
-      n: 1,
-      size: "1024x1024",
-    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_KEY2}`,
+    },
+    body: JSON.stringify(requestBody),
   });
 
-  if (!response.ok) {
-    throw new Error(`Image generation failed: ${response.statusText}`);
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+    if (data && data.data) {
+      return data.data[0]; // Return the first generated image
+    } else {
+      console.error("Unexpected response format");
+    }
+  } else {
+    console.error(`Error: ${response.status} ${response.statusText}`);
   }
 
   const result = await response.json();

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import analyzeImage from "./azure-image-analysis";
+import generateImage from "./azure-image-generation";
 
-function DisplayResults({ result, url, image }) {
+function DisplayResults({ result, url, image, generatedImage }) {
   if (!result) {
     return null;
   }
@@ -20,6 +21,21 @@ function DisplayResults({ result, url, image }) {
       />
       <p>URL: {url}</p>
       <pre>{JSON.stringify(result, null, 2)}</pre>
+
+      {generatedImage && (
+        <>
+          <h2>Generated Image</h2>
+          <img
+            src={generatedImage.url}
+            alt="Generated"
+            style={{
+              width: "500px",
+              borderRadius: "8px",
+              padding: "4px",
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
@@ -32,6 +48,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState("");
+  const [generatedImage, setGeneratedImage] = useState(null);
 
   return (
     <div>
@@ -69,10 +86,32 @@ function App() {
       >
         Analyze
       </button>
-      <button onClick={() => console.log("Generate")}>Generate</button>
+
+      <button
+        onClick={() => {
+          setIsLoading(true);
+          generateImage(value) // Pass the current value of the input field to the generateImage function
+            .then((result) => {
+              console.log(result);
+              setGeneratedImage(result); // Set the generatedImage state
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setIsLoading(false));
+        }}
+      >
+        Generate
+      </button>
+
       {isLoading && <p>Loading...</p>}
 
-      <DisplayResults result={imageAnalysis} url={imageUrl} image={image} />
+      <DisplayResults
+        result={imageAnalysis}
+        image={imageUrl}
+        url={imageUrl}
+        generatedImage={generatedImage}
+      />
     </div>
   );
 }

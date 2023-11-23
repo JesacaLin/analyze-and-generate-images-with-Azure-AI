@@ -25,7 +25,7 @@ function DisplayResults({ result, url, image }) {
   );
 }
 
-function DisplayGeneratedResults({ result, url, generatedImage }) {
+function DisplayGeneratedResults({ result, generatedImage, generatedResult }) {
   if (!result) {
     return null;
   }
@@ -42,7 +42,6 @@ function DisplayGeneratedResults({ result, url, generatedImage }) {
           padding: "4px",
         }}
       />
-      <p>URL: {url}</p>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );
@@ -57,6 +56,7 @@ function App() {
   const [image, setImage] = useState("");
   const [imageAnalysis, setImageAnalysis] = useState(null);
   const [generatedImage, setGeneratedImage] = useState(null);
+  const [generatedResult, setGeneratedResult] = useState(null);
 
   return (
     <div>
@@ -79,12 +79,12 @@ function App() {
       <button
         onClick={() => {
           setImage(value);
-          setImageUrl(value); // Set the imageUrl state to the current value of the input field
+          setImageUrl(value);
           setIsLoading(true);
-          analyzeImage(value) // Pass the current value of the input field to the analyzeImage function
+          analyzeImage(value)
             .then((result) => {
               console.log(result);
-              setImageAnalysis(result); // Set the imageAnalysis state
+              setImageAnalysis(result);
             })
             .catch((error) => {
               console.error(error);
@@ -101,6 +101,7 @@ function App() {
           generateImage(value)
             .then((result) => {
               console.log(result);
+              setGeneratedResult(result);
               setGeneratedImage(result.url);
             })
             .catch((error) => {
@@ -117,8 +118,7 @@ function App() {
       <DisplayResults result={imageAnalysis} image={imageUrl} url={imageUrl} />
 
       <DisplayGeneratedResults
-        result={generatedImage}
-        image={imageUrl}
+        result={generatedResult}
         generatedImage={generatedImage}
       />
     </div>

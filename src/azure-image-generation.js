@@ -1,12 +1,16 @@
 const generateImage = async (prompt) => {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${process.env.REACT_APP_API_KEY2}`,
+  };
+
+  console.log(headers);
+
   const response = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-    },
+    headers: headers,
     body: JSON.stringify({
-      model: "dall-e-3",
+      model: "dall-e-2",
       prompt: prompt,
       n: 1,
       size: "1024x1024",

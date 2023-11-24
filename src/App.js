@@ -148,7 +148,7 @@ function App() {
 
       {isLoading && <p>Loading...</p>}
 
-      <DisplayResults result={imageAnalysis} image={imageUrl} url={imageUrl} />
+      <DisplayResults result={imageAnalysis} image={image} url={imageUrl} />
 
       <DisplayGeneratedResults
         result={generatedResult}

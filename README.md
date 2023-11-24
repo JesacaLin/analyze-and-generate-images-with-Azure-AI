@@ -13,7 +13,7 @@ The challenge was to build a web application that leverages the power of AI to a
 
 ## 🚀 Deployment
 
-The application is deployed on Azure as a Static Web App. A CI/CD pipeline has been set up using GitHub Actions, which automatically builds and deploys the application whenever changes are pushed to the repository.
+The application is deployed on Azure as a Static Web App. A CI/CD pipeline has been set up using GitHub Actions, which automatically builds and deploys the application whenever changes are pushed to the repository. Link available upon request.
 
 ## 🏁 Getting Started
 

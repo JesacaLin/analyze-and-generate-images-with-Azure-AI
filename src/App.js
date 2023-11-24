@@ -116,7 +116,6 @@ function App() {
           setIsLoading(true);
           analyzeImage(value)
             .then((result) => {
-              console.log(result);
               setImageAnalysis(result);
             })
             .catch((error) => {
@@ -133,7 +132,6 @@ function App() {
           setIsLoading(true);
           generateImage(value)
             .then((result) => {
-              console.log(result);
               setGeneratedResult(result);
               setGeneratedImage(result.url);
             })

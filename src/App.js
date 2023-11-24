@@ -86,7 +86,7 @@ function App() {
     return (
       <p>
         The app is not configured properly. Please check your environment
-        variables.
+        variables. Good Luck!
       </p>
     );
   }

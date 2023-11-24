@@ -121,7 +121,10 @@ function App() {
             .catch((error) => {
               console.error(error);
             })
-            .finally(() => setIsLoading(false));
+            .finally(() => {
+              setIsLoading(false);
+              setValue(""); // Clear the input field
+            });
         }}
       >
         Analyze
@@ -138,7 +141,10 @@ function App() {
             .catch((error) => {
               console.error(error);
             })
-            .finally(() => setIsLoading(false));
+            .finally(() => {
+              setIsLoading(false);
+              setValue(""); // Clear the input field
+            });
         }}
       >
         Generate

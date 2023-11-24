@@ -1,3 +1,11 @@
+const apiKey = process.env.REACT_APP_API_KEY2;
+
+export function isConfigured() {
+  if (!apiKey) {
+    throw new Error("Missing API key");
+  }
+}
+
 const generateImage = async (prompt) => {
   console.log("Prompt:", prompt);
 
@@ -14,7 +22,7 @@ const generateImage = async (prompt) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.REACT_APP_API_KEY2}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify(requestBody),
   });

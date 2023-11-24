@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import analyzeImage from "./azure-image-analysis";
-import generateImage from "./azure-image-generation";
+import React, { useEffect, useState } from "react";
+import analyzeImage, {
+  isConfigured as isAnalysisConfigured,
+} from "./azure-image-analysis";
+import generateImage, {
+  isConfigured as isGenerationConfigured,
+} from "./azure-image-generation";
 
 function DisplayResults({ result, url, image }) {
   if (!result) {
@@ -42,21 +46,50 @@ function DisplayGeneratedResults({ result, generatedImage, generatedResult }) {
           padding: "4px",
         }}
       />
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      <pre
+        style={{
+          overflowX: "auto",
+          whiteSpace: "pre-wrap",
+          wordWrap: "break-word",
+          padding: "5px",
+        }}
+      >
+        {JSON.stringify(result, null, 2)}
+      </pre>
     </div>
   );
 }
 
 function App() {
-  const title = "Computer Vision";
   const [value, setValue] = React.useState("");
-
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState("");
   const [imageAnalysis, setImageAnalysis] = useState(null);
   const [generatedImage, setGeneratedImage] = useState(null);
   const [generatedResult, setGeneratedResult] = useState(null);
+  const [isConfigured, setIsConfigured] = useState(true);
+
+  const title = "Computer Vision";
+
+  useEffect(() => {
+    try {
+      isAnalysisConfigured();
+      isGenerationConfigured();
+    } catch (error) {
+      console.error(error);
+      setIsConfigured(false);
+    }
+  }, []);
+
+  if (!isConfigured) {
+    return (
+      <p>
+        The app is not configured properly. Please check your environment
+        variables.
+      </p>
+    );
+  }
 
   return (
     <div>

@@ -10,8 +10,6 @@ function DisplayResults({ result, url, image }) {
   if (!result) {
     return null;
   }
-  console.log(`Result Obj: ${result}`);
-  console.log(`Description: ${result.captions}`);
 
   return (
     <div>
@@ -25,7 +23,6 @@ function DisplayResults({ result, url, image }) {
           padding: "4px",
         }}
       />
-      <p>URL: {url}</p>
       <pre
         style={{
           maxWidth: "700px",
@@ -35,9 +32,15 @@ function DisplayResults({ result, url, image }) {
           padding: "5px",
         }}
       >
-        {result.captions}
+        Caption: {result.description.captions[0].text}
         <br />
-        {JSON.stringify(result, null, 2)}
+        Confidence: {result.description.captions[0].confidence}
+        <br />
+        Description: {result.description.tags.join(", ")}
+        URL: {url}
+        <br />
+        Format: {result.metadata.format}
+        {/* {JSON.stringify(result, null, 2)} */}
       </pre>
     </div>
   );

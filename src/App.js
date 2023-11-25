@@ -10,6 +10,8 @@ function DisplayResults({ result, url, image }) {
   if (!result) {
     return null;
   }
+  console.log(`Result Obj: ${result}`);
+  console.log(`Description: ${result.captions}`);
 
   return (
     <div>
@@ -18,21 +20,36 @@ function DisplayResults({ result, url, image }) {
         src={image}
         alt="Analyzed"
         style={{
-          width: "500px",
+          maxWidth: "700px",
           borderRadius: "8px",
           padding: "4px",
         }}
       />
       <p>URL: {url}</p>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      <pre
+        style={{
+          maxWidth: "700px",
+          overflowX: "auto",
+          whiteSpace: "pre-wrap",
+          wordWrap: "break-word",
+          padding: "5px",
+        }}
+      >
+        {result.captions}
+        <br />
+        {JSON.stringify(result, null, 2)}
+      </pre>
     </div>
   );
 }
 
-function DisplayGeneratedResults({ result, generatedImage, generatedResult }) {
+function DisplayGeneratedResults({ result, generatedImage, userPrompt }) {
   if (!result) {
     return null;
   }
+  console.log(`Result: ${result.revised_prompt}`);
+  console.log(`generatedImage: ${generatedImage}`);
+  console.log(`value: ${userPrompt}`);
 
   return (
     <div>
@@ -41,36 +58,48 @@ function DisplayGeneratedResults({ result, generatedImage, generatedResult }) {
         src={generatedImage}
         alt="Generated"
         style={{
-          width: "500px",
+          maxWidth: "700px",
           borderRadius: "8px",
           padding: "4px",
         }}
       />
+
       <pre
         style={{
+          maxWidth: "700px",
           overflowX: "auto",
           whiteSpace: "pre-wrap",
           wordWrap: "break-word",
           padding: "5px",
         }}
       >
-        {JSON.stringify(result, null, 2)}
+        User Prompt: {userPrompt}
+        {/* Can remove this later and replace with css */}
+        <br />
+        Revised Prompt: {result.revised_prompt}
+        <br />
+        URL: {generatedImage}
+        {/* {JSON.stringify(result, null, 2)} */}
       </pre>
     </div>
   );
 }
 
 function App() {
+  //tracking state
   const [value, setValue] = React.useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState("");
+  const [lastClicked, setLastClicked] = useState(null);
+  const [userPrompt, setUserPrompt] = useState("");
+  //related to api calls
   const [imageAnalysis, setImageAnalysis] = useState(null);
   const [generatedImage, setGeneratedImage] = useState(null);
   const [generatedResult, setGeneratedResult] = useState(null);
   const [isConfigured, setIsConfigured] = useState(true);
 
-  const title = "Computer Vision";
+  const title = "AI Vision";
 
   useEffect(() => {
     try {
@@ -94,7 +123,7 @@ function App() {
   return (
     <div>
       <h1>{title}</h1>
-      <h4>Insert URL or type prompt: **testing**</h4>
+      <h4>Insert URL or type prompt:</h4>
       <input
         type="text"
         value={value}
@@ -123,7 +152,8 @@ function App() {
             })
             .finally(() => {
               setIsLoading(false);
-              setValue(""); // Clear the input field
+              setValue("");
+              setLastClicked("analyze");
             });
         }}
       >
@@ -133,6 +163,7 @@ function App() {
       <button
         onClick={() => {
           setIsLoading(true);
+          setUserPrompt(value);
           generateImage(value)
             .then((result) => {
               setGeneratedResult(result);
@@ -143,21 +174,33 @@ function App() {
             })
             .finally(() => {
               setIsLoading(false);
-              setValue(""); // Clear the input field
+              setValue("");
+              setLastClicked("generate");
             });
         }}
       >
         Generate
       </button>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p>Loading your results...</p>}
 
-      <DisplayResults result={imageAnalysis} image={image} url={imageUrl} />
+      {lastClicked === "analyze" && imageAnalysis && (
+        // <>
+        //   {isLoading && <p>Loading...</p>}
+        <DisplayResults result={imageAnalysis} image={image} url={imageUrl} />
+        // </>
+      )}
 
-      <DisplayGeneratedResults
-        result={generatedResult}
-        generatedImage={generatedImage}
-      />
+      {lastClicked === "generate" && (
+        // <>
+        //   {isLoading && <p>Loading...</p>}
+        <DisplayGeneratedResults
+          result={generatedResult}
+          generatedImage={generatedImage}
+          userPrompt={userPrompt}
+        />
+        // </>
+      )}
     </div>
   );
 }

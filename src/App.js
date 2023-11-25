@@ -37,6 +37,7 @@ function DisplayResults({ result, url, image }) {
         Confidence: {result.description.captions[0].confidence}
         <br />
         Description: {result.description.tags.join(", ")}
+        <br />
         URL: {url}
         <br />
         Format: {result.metadata.format}

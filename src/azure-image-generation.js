@@ -6,12 +6,17 @@ export function isConfigured() {
   }
 }
 
+//what if I allow a user to specify the style and size of the generated image?
+//DALL·E-3 accepts three different image sizes: 1024px by 1024px, 1792px by 1024px, and 1024px by 1792px.
+
 const generateImage = async (prompt) => {
   const requestBody = {
     model: "dall-e-3",
     prompt: prompt,
+    quality: "hd",
+    style: "natural",
     n: 1,
-    size: "1024x1024",
+    size: "1024x1792",
   };
 
   const response = await fetch("https://api.openai.com/v1/images/generations", {
